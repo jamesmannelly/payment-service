@@ -274,7 +274,7 @@ pipeline:
                                                     connectorRef: nikpgithub
                                                     gitFetchType: Branch
                                                     paths:
-                                                        - templates-prod
+                                                        - templates-prod-cv
                                                     repoName: payment-service-nonprod
                                                     branch: master
                                             skipResourceVersioning: false
