@@ -332,6 +332,38 @@ pipeline:
                                           type: K8sCanaryDelete
                                           timeout: 10m
                                           spec: {}
+                                    - step:
+                                          type: Verify
+                                          name: canarycv
+                                          identifier: canarycv
+                                          spec:
+                                              type: Canary
+                                              spec:
+                                                  sensitivity: HIGH
+                                                  duration: 5m
+                                                  deploymentTag: <+serviceConfig.artifacts.primary.tag>
+                                          timeout: 2h
+                                          failureStrategies:
+                                              - onFailure:
+                                                    errors:
+                                                        - Verification
+                                                    action:
+                                                        type: ManualIntervention
+                                                        spec:
+                                                            timeout: 2h
+                                                            onTimeout:
+                                                                action:
+                                                                    type: StageRollback
+                                              - onFailure:
+                                                    errors:
+                                                        - Unknown
+                                                    action:
+                                                        type: ManualIntervention
+                                                        spec:
+                                                            timeout: 2h
+                                                            onTimeout:
+                                                                action:
+                                                                    type: Ignore
                                 rollbackSteps:
                                     - step:
                                           name: Canary Delete
@@ -358,40 +390,6 @@ pipeline:
                                           timeout: 10m
                                           spec: {}
                           - step:
-                                type: Verify
-                                name: Prometheus
-                                identifier: Prometheus
-                                spec:
-                                    type: Rolling
-                                    spec:
-                                        sensitivity: HIGH
-                                        duration: 5m
-                                        deploymentTag: <+serviceConfig.artifacts.primary.tag>
-                                timeout: 2h
-                                failureStrategies:
-                                    - onFailure:
-                                          errors:
-                                              - Verification
-                                          action:
-                                              type: ManualIntervention
-                                              spec:
-                                                  timeout: 2h
-                                                  onTimeout:
-                                                      action:
-                                                          type: StageRollback
-                                    - onFailure:
-                                          errors:
-                                              - Unknown
-                                          action:
-                                              type: ManualIntervention
-                                              spec:
-                                                  timeout: 2h
-                                                  onTimeout:
-                                                      action:
-                                                          type: Ignore
-                                when:
-                                    stageStatus: Success
-                          - step:
                                 type: ShellScript
                                 name: WrapUp
                                 identifier: WrapUp
@@ -416,6 +414,7 @@ pipeline:
                                     executionTarget: {}
                                 timeout: 10m
                       rollbackSteps: []
+                  serviceDependencies: []
               tags: {}
               failureStrategies:
                   - onFailure:
