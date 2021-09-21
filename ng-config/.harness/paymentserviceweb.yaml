@@ -365,7 +365,7 @@ pipeline:
                                     type: Rolling
                                     spec:
                                         sensitivity: HIGH
-                                        duration: 10m
+                                        duration: 5m
                                         deploymentTag: <+serviceConfig.artifacts.primary.tag>
                                 timeout: 2h
                                 failureStrategies:
@@ -391,7 +391,6 @@ pipeline:
                                                           type: Ignore
                                 when:
                                     stageStatus: Success
-                                    condition: <+pipeline.variables.seusername> == "test"
                           - step:
                                 type: ShellScript
                                 name: WrapUp
