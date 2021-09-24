@@ -369,7 +369,8 @@ pipeline:
                                                     source:
                                                         type: Inline
                                                         spec:
-                                                            script: |
+                                                            script: |+
+                                                                sleep 90
                                                                 read -r -d '' script <<-"EOF"
                                                                 import os
                                                                 from selenium import webdriver
@@ -462,8 +463,12 @@ pipeline:
                                                                 python -c "$script"
                                                                 sleep 60
                                                                 python -c "$script"
+                                                                curl https://prometheus$subdomain.cie-demo.co.uk/
                                                                 sleep 60
                                                                 python -c "$script"
+                                                                sleep 60
+                                                                python -c "$script"
+
                                                     environmentVariables:
                                                         - name: subdomain
                                                           type: String
