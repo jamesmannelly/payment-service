@@ -470,7 +470,10 @@ pipeline:
                                                           value: <+pipeline.variables.seusername>
                                                     outputVariables: []
                                                     executionTarget: {}
+                                                    delegateSelectors:
+                                                        - devx-demo-gke
                                                 timeout: 10m
+                                                failureStrategies: []
                                     - step:
                                           name: Canary Delete
                                           identifier: canaryDelete
