@@ -488,7 +488,7 @@ pipeline:
                                                     source:
                                                         type: Inline
                                                         spec:
-                                                            script: |+
+                                                            script: |
                                                                 read -r -d '' script <<-"EOF"
                                                                 import os
                                                                 from selenium import webdriver
@@ -592,13 +592,19 @@ pipeline:
 
                                                                 EOF
                                                                 python -c "$script"
-                                                                sleep 60
+                                                                sleep 30
                                                                 python -c "$script"
-                                                                sleep 60
+                                                                sleep 30
                                                                 python -c "$script"
-                                                                sleep 60
+                                                                sleep 30
                                                                 python -c "$script"
-
+                                                                python -c "$script"
+                                                                sleep 30
+                                                                python -c "$script"
+                                                                sleep 30
+                                                                python -c "$script"
+                                                                sleep 30
+                                                                python -c "$script"
                                                     environmentVariables: []
                                                     outputVariables: []
                                                     executionTarget: {}
