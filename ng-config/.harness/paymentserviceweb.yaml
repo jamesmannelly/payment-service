@@ -332,38 +332,60 @@ pipeline:
                                           type: K8sCanaryDelete
                                           timeout: 10m
                                           spec: {}
-                                    - step:
-                                          type: Verify
-                                          name: canarycv
-                                          identifier: canarycv
-                                          spec:
-                                              type: Canary
-                                              spec:
-                                                  sensitivity: HIGH
-                                                  duration: 5m
-                                                  deploymentTag: <+serviceConfig.artifacts.primary.tag>
-                                          timeout: 2h
-                                          failureStrategies:
-                                              - onFailure:
-                                                    errors:
-                                                        - Verification
-                                                    action:
-                                                        type: ManualIntervention
+                                    - parallel:
+                                          - step:
+                                                type: Verify
+                                                name: canarycv
+                                                identifier: canarycv
+                                                spec:
+                                                    type: Canary
+                                                    spec:
+                                                        sensitivity: HIGH
+                                                        duration: 5m
+                                                        deploymentTag: <+serviceConfig.artifacts.primary.tag>
+                                                timeout: 2h
+                                                failureStrategies:
+                                                    - onFailure:
+                                                          errors:
+                                                              - Verification
+                                                          action:
+                                                              type: ManualIntervention
+                                                              spec:
+                                                                  timeout: 2h
+                                                                  onTimeout:
+                                                                      action:
+                                                                          type: StageRollback
+                                                    - onFailure:
+                                                          errors:
+                                                              - Unknown
+                                                          action:
+                                                              type: ManualIntervention
+                                                              spec:
+                                                                  timeout: 2h
+                                                                  onTimeout:
+                                                                      action:
+                                                                          type: Ignore
+                                          - step:
+                                                type: ShellScript
+                                                name: Selenium
+                                                identifier: Selenium
+                                                spec:
+                                                    shell: Bash
+                                                    onDelegate: true
+                                                    source:
+                                                        type: Inline
                                                         spec:
-                                                            timeout: 2h
-                                                            onTimeout:
-                                                                action:
-                                                                    type: StageRollback
-                                              - onFailure:
-                                                    errors:
-                                                        - Unknown
-                                                    action:
-                                                        type: ManualIntervention
-                                                        spec:
-                                                            timeout: 2h
-                                                            onTimeout:
-                                                                action:
-                                                                    type: Ignore
+                                                            script: |-
+                                                                echo "Executing Selenium Scripts"
+                                                                url="http://$subdomain.cie-demo.co.uk"
+                                                                curl $url
+                                                    environmentVariables:
+                                                        - name: subdomain
+                                                          type: String
+                                                          value: <+pipeline.variables.seusername>
+                                                    outputVariables: []
+                                                    executionTarget: {}
+                                                timeout: 10m
                                 rollbackSteps:
                                     - step:
                                           name: Canary Delete
