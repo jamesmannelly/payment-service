@@ -463,7 +463,6 @@ pipeline:
                                                                 python -c "$script"
                                                                 sleep 60
                                                                 python -c "$script"
-                                                                curl https://prometheus$subdomain.cie-demo.co.uk/
                                                                 sleep 60
                                                                 python -c "$script"
                                                                 sleep 60
