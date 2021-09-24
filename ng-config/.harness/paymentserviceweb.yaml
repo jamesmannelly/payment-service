@@ -326,12 +326,6 @@ pipeline:
                                                   spec:
                                                       count: 1
                                               skipDryRun: false
-                                    - step:
-                                          name: Canary Delete
-                                          identifier: canaryDelete
-                                          type: K8sCanaryDelete
-                                          timeout: 10m
-                                          spec: {}
                                     - parallel:
                                           - step:
                                                 type: Verify
@@ -386,6 +380,12 @@ pipeline:
                                                     outputVariables: []
                                                     executionTarget: {}
                                                 timeout: 10m
+                                    - step:
+                                          name: Canary Delete
+                                          identifier: canaryDelete
+                                          type: K8sCanaryDelete
+                                          timeout: 10m
+                                          spec: {}
                                 rollbackSteps:
                                     - step:
                                           name: Canary Delete
