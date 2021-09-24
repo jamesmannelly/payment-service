@@ -460,6 +460,10 @@ pipeline:
 
                                                                 EOF
                                                                 python -c "$script"
+                                                                sleep 60
+                                                                python -c "$script"
+                                                                sleep 60
+                                                                python -c "$script"
                                                     environmentVariables:
                                                         - name: subdomain
                                                           type: String
